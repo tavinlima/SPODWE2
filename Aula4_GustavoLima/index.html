@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 04 - Desenvolvimento Web II</title>
+</head>
+<body>
+    <script>
+        // a) Crie uma função em um objeto A. Em seguida, crie a mesma função em outro objeto B, porém
+        // reutilizando a função do objeto A.
+        var reino = {
+            tipo: "Qualquer um",
+            retornaTipo: function() {
+                console.log(this.tipo)
+                return this.tipo;
+            }
+        }
+
+        reino.retornaTipo();
+
+        var cachorro = {
+            tipo: "Animal",
+            retornaTipo: reino.retornaTipo
+        }
+
+        cachorro.retornaTipo();
+
+        console.log("----------------------------------------------------")
+
+        // b) Crie uma função que receba dois parâmetros e execute-a com três objetos por meio do
+        // método nativo call().
+        function somar(t1, t2) {
+            var soma = this.n1 + this.n2
+            
+            console.log("Soma de: " + t1+t2 +": "+ soma)
+        }
+
+        var pos = {
+            n1:2,
+            n2:4
+        }
+        
+        var neg={
+            n1:-2,
+            n2:-5
+        }
+
+        var par={
+            n1:44,
+            n2:888
+        }
+
+        somar.call(pos, "posit", "ivos")
+        somar.call(neg, "negat", "ivos")
+        somar.call(par, "par", "es")
+
+        console.log("----------------------------------------------------")
+
+        // c) Crie uma função que receba dois parâmetros e execute-a com três objetos por meio do
+        // método nativo apply().
+        function listaDeCompras(text1, text2) {
+            
+            console.log("preciso comprar: " + this.nome + " da marca: " + text1 + text2 + this.preco)
+        }
+
+        var objeto = {
+            nome:"relogio",
+            preco:200.00
+        }
+
+        var eletro = {
+            nome:"geladeira",
+            preco:4500.00
+        }
+
+        var roupa = {
+            nome:"camisa",
+            preco:79.99
+        }
+
+        listaDeCompras.apply(objeto, ["Relógio dahora",", R$: "])
+        listaDeCompras.apply(eletro, ["Geladeira top",", R$: "])
+        listaDeCompras.apply(roupa, ["Mafiusu",", R$: "])
+
+        console.log("----------------------------------------------------")
+
+        // d) Crie uma função que receba dois parâmetros e execute-a com três objetos por meio do
+        // método nativo bind().
+        function retornaPokemon(nome, descricao) {
+            console.log("nome: " + nome + " decrição: " + descricao)
+            console.log("geração: " + this.geracao + ". Tipo primário: " + this.tipoPrim + ", tipo secundário: " + this.tipoSec)
+        }
+
+        var pikachu = {
+            geracao:"1ª",
+            tipoPrim: "eletrico",
+            tipoSec: "ND"
+        }
+
+        var greninja = {
+            geracao:"6ª",
+            tipoPrim: "agua",
+            tipoSec: "noturno"
+        }
+
+        var sylveon = {
+            geracao:"6ª",
+            tipoPrim: "fada",
+            tipoSec: "ND"
+        }
+
+        var retornaPikachu = retornaPokemon.bind(pikachu)
+        retornaPikachu("pikachu", "pokémon rato")
+
+        var retornaGreninja = retornaPokemon.bind(greninja)
+        retornaGreninja("greninja", "pokémon sapo ninja")
+
+        var retornaSylveon = retornaPokemon.bind(sylveon)
+        retornaSylveon("sylveon","pokémon fada")
+
+        console.log("----------------------------------------------------")
+
+        // e) Verifique a existência de uma propriedade própria e outra não própria em um objeto.
+        console.log("geracao" in sylveon)
+        console.log(sylveon.hasOwnProperty("geracao"))
+
+        console.log("toString" in sylveon)
+        console.log(sylveon.hasOwnProperty("toString"))
+
+        // f) Remova uma propriedade própria de um objeto.
+        console.log(sylveon.geracao)
+
+        delete sylveon.geracao
+
+        console.log(sylveon.geracao)
+        console.log("----------------------------------------------------")
+
+        // g) Crie um objeto com três propriedades (sendo uma delas uma função) e percorra-as usando um
+        // loop for-in e, em seguida, usando o método Object.keys().
+        var celebridade = {
+            idade:77,
+            nome:"Martin Scorcese",
+            retornaIdade: function() {
+                console.log("Idade: " + this.idade)
+            }
+        }
+
+        console.log("----------------------------------------------------")
+
+        var prop;
+
+        for(prop in celebridade) {
+            console.log("propriedade: " + prop);
+            console.log("valor: " + celebridade[prop])
+        }
+
+        var props = Object.keys(celebridade)
+
+        for(var i = 0; i<props.length;i++) {
+            console.log("propriedade: " + props[i]);
+            console.log("valor: " + celebridade[props[i]])
+        }
+
+        console.log("----------------------------------------------------")
+        // h) Crie um objeto com duas propriedades de acesso. Inclua alguma condição para que a leitura
+        // seja permitida, e algum cálculo antes de a atribuição ser realizada.
+        var musica = {
+            _titulo:"",
+            _duracao:0,
+
+            get titulo() {
+                if(this._titulo.charAt(0) === "C"){
+                    return this._titulo
+                } else return "não começa com c"
+            },
+
+            set titulo(titulo) {
+                this._titulo = titulo;
+            },
+
+            get duracao() {
+                return this._duracao
+            },
+
+            set duracao(duracao) {
+                this._duracao = duracao + 23;
+            }
+        }   
+
+        musica.titulo="Honeymoon Avenue"
+        musica.duracao=2.09
+
+        console.log(musica.titulo)
+        console.log(musica.duracao)
+
+        musica.titulo="Colors"
+        musica.duracao=3.54
+
+        console.log(musica.titulo)
+        console.log(musica.titulo)
+        console.log(musica.duracao)
+
+        // i) Crie um objeto e faça com que uma de suas propriedades se torne não iterável e não
+        // configurável. Em seguida, verifique os atributos da propriedade por meio do método Object.
+        // getOwnPropertyDescriptor().
+        var sentimento = {
+            nome: "ansiedade",
+            forca: "forte"
+        }
+
+        Object.defineProperty(sentimento, "forca", {
+            enumerable: false
+        })
+
+        Object.defineProperty(sentimento, "forca", {
+            configurable: false
+        })
+
+        var nomeSentimento = Object.getOwnPropertyDescriptor(sentimento, "nome")
+        var forcaSentimento = Object.getOwnPropertyDescriptor(sentimento, "forca")
+        console.log(nomeSentimento.enumerable)
+        console.log(nomeSentimento.configurable)
+        console.log(forcaSentimento.enumerable)
+        console.log(forcaSentimento.configurable)
+
+        // j) Crie um objeto e congele-o. Em seguida, verifique se ele é não extensível, selado e congelado.
+        // Por fim, tente adicionar uma propriedade, remover uma propriedade, atualizar e ler o valor de
+        // uma propriedade do objeto.
+        var celular = {
+            marca: "Samsung",
+            modelo: "S24 Ultra"
+        }
+
+        console.log(celular.operadora)
+
+        Object.freeze(celular)
+
+        console.log(Object.isSealed(celular))
+        console.log(Object.isExtensible(celular))
+        console.log(Object.isFrozen(celular))
+
+        celular.ano = 2025;
+
+        console.log(celular.ano)
+
+        delete celular.modelo;
+
+        console.log("modelo" in celular)
+
+        celular.marca = "Apple"
+
+        console.log(celular.marca)
+    </script>
+</body>
+</html>
