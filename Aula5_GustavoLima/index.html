@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 05</title>
+</head>
+<body>
+
+
+<script>
+
+// a) Usando a sintaxe da ES6, crie um construtor que receba a marca, o modelo e o ano de um
+// objeto Carro. Use o método defineProperty() para configurar os atributos get, set, enumerable
+// e configurable destas três propriedades. Em seguida, crie dois objetos Carro com diferentes
+// marcas, modelos e anos e imprima seus dados no console do navegador.
+
+function Carro(marca, modelo, ano) {
+    // Object.defineProperty(this, "marca", {
+    //     get: function() {
+    //         return marca
+    //     },
+    //     set: function(novaMarca) {
+    //         marca = novaMarca;
+    //     },
+    //     enumerable: true,
+    //     configurable: true
+    // })
+
+    // Object.defineProperty(this, "modelo", {
+    //     get: function() {
+    //         return modelo
+    //     },
+    //     set: function(novoModelo) {
+    //         modelo = novoModelo;
+    //     },
+    //     enumerable: true,
+    //     configurable: true
+    // })
+    // Object.defineProperty(this, "ano", {
+    //     get: function() {
+    //         return ano
+    //     },
+    //     set: function(novoAno) {
+    //         ano = novoAno;
+    //     },
+    //     enumerable: true,
+    //     configurable: true
+    // });
+
+    Object.defineProperties(this, {
+        "marca": {
+        get: function() {
+            return marca
+        },
+        set: function(novaMarca) {
+            marca = novaMarca;
+        },
+        enumerable: true,
+        configurable: true
+    }, "modelo": {
+        get: function() {
+            return modelo
+        },
+        set: function(novoModelo) {
+            modelo = novoModelo;
+        },
+        enumerable: true,
+        configurable: true
+    }, "ano": {
+        get: function() {
+            return ano
+        },
+        set: function(novoAno) {
+            ano = novoAno;
+        },
+        enumerable: true,
+        configurable: true
+    }})
+}
+
+    var carro1 = new Carro("Toyota", "Corolla", "2020")
+
+    var carro2 = new Carro("Fiat", "Mobi", "2023")
+
+    console.log(carro1.marca)
+    console.log(carro1.modelo)
+    console.log(carro1.ano)
+
+    console.log(carro2.marca)
+    console.log(carro2.modelo)
+    console.log(carro2.ano)
+
+// b) Crie um objeto literal que tenha uma única propriedade de dado, além das propriedades de
+// Object.prototype. Em seguida, sobrescreva o método hasOwnProperty() do protótipo de
+// modo que ele passe a retornar os textos a seguir. Por fim, imprima o retorno do método
+// hasOwnProperty() sobrescrito para testar propriedades próprias, do protótipo e inexistentes
+// no objeto.
+// • "Sim, o objeto tem esta propriedade", caso a propriedade exista no objeto que chama o
+// método hasOwnProperty() (seja ela própria ou do protótipo); ou
+// • "Não, o objeto não tem esta propriedade", caso a propriedade não exista no objeto que
+// chama o método hasOwnProperty().
+var moveis = {
+    tipo: "Cama"
+}
+
+moveis.hasOwnProperty = function(prop) {
+    if(Object.getOwnPropertyDescriptor(this,prop) && prop in moveis) {
+        return "Sim, o objeto tem esta propriedade"
+    } 
+    else {
+        return "Não, o objeto não tem esta propriedade"
+    } 
+}
+
+console.log(moveis.hasOwnProperty("tipo"))
+console.log(moveis.hasOwnProperty("nome"))
+
+console.log("----------------------------------------------------------")
+
+// c) Copie o exercício anterior e, no final do código, apague a propriedade própria
+// hasOwnProperty() com delete. Em seguida, repita os mesmos testes, porém agora com o
+// método hasOwnProperty() do protótipo.
+var moveis = {
+    tipo: "Cama"
+}
+
+moveis.hasOwnProperty = function(prop) {
+    if(Object.getOwnPropertyDescriptor(this,prop) && prop in moveis) {
+        return "Sim, o objeto tem esta propriedade"
+    } 
+    else {
+        return "Não, o objeto não tem esta propriedade"
+    } 
+}
+
+console.log(moveis.hasOwnProperty("tipo"))
+console.log(moveis.hasOwnProperty("nome"))
+
+delete moveis.hasOwnProperty
+
+console.log(moveis.hasOwnProperty("tipo"))
+console.log(moveis.hasOwnProperty("nome"))
+
+// d) Crie um construtor que receba um país para instanciar um objeto Intercambio. Em seguida,
+// defina um objeto literal usando as propriedades prototype e constructor para adicionar os
+// métodos retornaPais() e definePais() ao protótipo do objeto Intercambio. Por fim, crie dois
+// objetos Intercambio e use-os para chamar os dois métodos incluídos.
+function Intercambio(pais) {
+    this.pais = pais;
+}
+
+Intercambio.prototype = {
+    constructor: Intercambio,
+    retornaPais: function() {
+        return this.pais
+    },
+    definePais: function(pais) {
+        return this.pais=pais;
+    }
+}
+
+var intercambio1 = new Intercambio("Alemanha");
+console.log(intercambio1.retornaPais())
+intercambio1.definePais("África do Sul")
+console.log(intercambio1.retornaPais())
+
+var intercambio2 = new Intercambio("Japão")
+console.log(intercambio2.retornaPais())
+intercambio2.definePais("Rússia")
+console.log(intercambio2.retornaPais())
+
+// e) Adicione o método defineLetraInicialMaiuscula() à String.prototype. Este método deve
+// converter a 1ª letra de uma string para maiúscula e retornar a string modificada. Dica: Na
+// implementação do método, use os métodos charAt(), toUpperCase() e substring() do tipo String.
+String.prototype.defineLetraInicialMaiuscula = function() {
+    var frase = this.replace(this.substring(0,1),this.charAt(0).toUpperCase());
+    return frase
+}
+
+var fraseTeste = "amanha é feriado"
+
+var resultado = fraseTeste.defineLetraInicialMaiuscula()
+
+console.log(resultado)
+
+// f) Crie um objeto literal esporte que contenha as propriedades id, modalidade (ex.: futebol,
+// volei, corrida etc) e categoria (esporte coletivo, esporte aquático, atletismo etc), além do
+// método toString() sobrescrito para retornar a modalidade do esporte.
+var Esporte = {
+    id:1,
+    modalidade:"futebol",
+    categoria:"coletivo",
+
+    toString: function() {
+        return this.modalidade
+    }
+}
+
+console.log(Esporte.toString())
+
+// g) Crie um objeto literal filme1 contendo uma propriedade titulo e um método retornaTitulo(), o
+// qual imprime o título do filme no console. Em seguida, use o método Object.create() para criar
+// o objeto filme2, que herda de filme1 e sobrepõe a propriedade titulo com outro valor. Por fim,
+// use os dois objetos para chamar o método retornaFilme(). 
+var filme1 = {
+    titulo:"A Culpa É Das Estrelas",
+    retornaTitulo: function() {
+        return this.titulo
+    }
+}
+
+var filme2 = Object.create(filme1, {
+    titulo: {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: "O Protetor"
+    }
+})
+
+console.log(filme1.retornaTitulo())
+console.log(filme2.retornaTitulo())
+
+</script>
+</body>
+</html>
