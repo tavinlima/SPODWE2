@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 6</title>
+</head>
+
+<body>
+    <h1>Exercícios: </h1>
+
+    <p id="paragrafo"></p>
+
+    <script>
+        // Implemente programas em JavaScript que realizem as tarefas descritas a seguir:
+        // a) Crie duas funções simples que realizem as seguintes tarefas no texto a seguir, nesta ordem: 1ª
+        // Função: Substitua todas as ocorrências de “batatas” por “cenouras”; 2ª Função: Modifique as
+        // ocorrências de “cenouras” para que fiquem com todas as letras maiúsculas; 3ª Função: Exiba
+        // em um elemento <p> o texto com todas as modificações realizadas. Dica: Use o método
+        // replaceAll() nas duas primeiras funções.
+        var texto = "Supõe tu um campo de batatas e duas tribos famintas. As batatas apenas chegam para alimentar uma das tribos, que assim adquire forças para transpor a montanha e ir à outra vertente, onde há batatas em abundância; mas, se as duas tribos dividirem em paz as batatas do campo, não chegam a nutrir-se suficientemente e morrem de inanição. A paz, nesse caso, é a destruição; a guerra é a conservação. Uma das tribos extermina a outra e recolhe os despojos. (...) Ao vencido, ódio ou compaixão; ao vencedor, as batatas. Machado de Assis – Quincas Borba (1891)";
+
+        function cenourarBatatas(texto) {
+            return texto.replaceAll("batatas", "cenouras");
+        }
+
+        function toUpperCenouras(texto) {
+            return texto.replaceAll("cenouras", "CENOURAS");
+        }
+
+        function exibeTexto(texto) {
+            let p = document.getElementById("paragrafo")
+            return p.innerHTML = texto;
+        }
+
+        let textoCenourado = cenourarBatatas(texto)
+
+        let toUpperCenourado = toUpperCenouras(textoCenourado)
+
+        console.log(texto);
+
+        console.log(textoCenourado);
+
+        console.log(toUpperCenourado)
+
+        exibeTexto(toUpperCenourado)
+
+        // b) Modifique o exercício anterior de modo que a 2ª e a 3ª funções se tornem funções callback.
+        function callbackCenoura(texto, callOne, callTwo) {
+            texto = texto.replaceAll("batatas", "cenouras");
+            callTwo(callOne(texto))
+        }
+
+        callbackCenoura(texto, toUpperCenouras, exibeTexto)
+
+        // c) Usando o método setTimeout(), crie funções callback para que uma página exiba os números
+        // de 1 a 5, separados por vírgulas, em intervalos de um segundo.
+
+
+        function exibeCinco() {
+            setTimeout(() => console.log("5"), 5000);
+        }
+
+        function exibeQuatro(callbackCinco) {
+            setTimeout(() => console.log("4,"), 4000);
+            callbackCinco()
+        }
+
+        function exibeTres(callbackQuatro, callbackCinco) {
+            setTimeout(() => console.log("3,"), 3000);
+            callbackQuatro(callbackCinco)
+        }
+
+        function exibeDois(callbackTres, callbackQuatro, callbackCinco) {
+            setTimeout(() => console.log("2,"), 2000);
+            callbackTres(callbackQuatro, callbackCinco)
+        }
+
+        function exibeUm(callbackDois, callbackTres, callbackQuatro, callbackCinco) {
+            setTimeout(() => console.log("1,"), 1000);
+            callbackDois(callbackTres, callbackQuatro, callbackCinco)
+        }
+
+        exibeUm(exibeDois, exibeTres, exibeQuatro, exibeCinco)
+
+
+        // d) Usando como base o último exemplo apresentado na aula, crie uma função genérica para gerar
+        // promises. Em seguida, usando esta função, faça uma requisição assíncrona para obter dados de
+        // países a partir da API localizada em https://restcountries.com. Para testar a API, busque dados
+        // do Brasil usando a URL https://restcountries.com/v3.1/name/Brazil. Após executar a requisição
+        // com sucesso, modifique esta URL para torná-la inválida e teste novamente. Não esqueça de
+        // usar os métodos catch() e finally(), além do método then()
+
+        function getPromise(url) {
+            let promise = new Promise(function (resolve, reject) {
+                let req = new XMLHttpRequest();
+                req.open("GET", url);
+                req.onload = function () {
+                    if (req.status === 200) { resolve(req.response) }
+                    else { reject("Erro! " + req.status + " " + req.response) }
+                }
+                req.send()
+            }) 
+            return promise
+        }
+
+        let promise = getPromise("https://restcountries.com/v3.1/name/Brazil")
+
+        const consumer = () => {
+            promise.then(
+                value => {
+                    console.log(value)
+                }
+            ).catch(error => {
+                console.log(error)
+            }).finally(() => {
+                console.log("Requisição concluída")
+            })
+        }
+
+        consumer()
+
+        promise = getPromise("https://restcountries.com/v3.1/name/Kanto")
+
+        consumer()
+
+    </script>
+
+
+</body>
+
+</html>
